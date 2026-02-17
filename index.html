@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Михаил Гарбуз — прогресс результатов</title>
     <style>
+		.video-link {
+			display: inline-block;
+			margin-left: 8px;
+			text-decoration: none;
+			font-size: 1.2rem;
+			transition: transform 0.2s;
+		}
+
+		.video-link:hover {
+			transform: scale(1.2);
+		}
         * {
             margin: 0;
             padding: 0;
@@ -631,34 +642,34 @@
                     // 50 м на спине
                     { distance: '50m', date: '2024-03-01', result: 27.44, event: 'ЧМ', city: 'Доха' },
                     { distance: '50m', date: '2024-03-01', result: 27.80, event: 'ЧМ', city: 'Доха' },
-                    { distance: '50m', date: '2024-03-02', result: 27.98, event: 'ЧМ', city: 'Доха' },
-                    { distance: '50m', date: '2024-04-06', result: 27.21, event: 'Кубок России', city: 'Казань' },
-                    { distance: '50m', date: '2024-04-07', result: 27.41, event: 'Кубок России', city: 'Казань' },
-                    { distance: '50m', date: '2024-04-07', result: 27.23, event: 'Кубок России', city: 'Казань' },
-                    { distance: '50m', date: '2024-06-15', result: 27.55, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
-                    { distance: '50m', date: '2024-06-16', result: 27.55, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
-                    { distance: '50m', date: '2024-06-16', result: 27.33, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
-                    { distance: '50m', date: '2024-09-21', result: 27.35, event: 'СахМастерс', city: 'Южно-Сахалинск' },
-                    { distance: '50m', date: '2024-09-21', result: 27.54, event: 'СахМастерс', city: 'Южно-Сахалинск' },
-                    { distance: '50m', date: '2025-03-28', result: 27.90, event: 'Чемпионат России', city: 'Обнинск' },
-                    { distance: '50m', date: '2025-03-28', result: 27.79, event: 'Чемпионат России', city: 'Обнинск' },
-                    { distance: '50m', date: '2025-03-29', result: 27.76, event: 'Чемпионат России', city: 'Обнинск' },
-                    { distance: '50m', date: '2025-06-07', result: 27.95, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
-                    { distance: '50m', date: '2025-06-08', result: 27.97, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
-                    { distance: '50m', date: '2025-06-08', result: 27.91, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
-                    { distance: '50m', date: '2025-08-13', result: 27.25, event: 'ЧМ Мастерс', city: 'Сингапур' },
-                    { distance: '50m', date: '2025-08-13', result: 27.31, event: 'ЧМ Мастерс', city: 'Сингапур' },
-                    { distance: '50m', date: '2025-08-13', result: 26.99, event: 'ЧМ Мастерс', city: 'Сингапур' },
-					{ distance: '50m', date: '2026-02-11', result: 27.27, event: 'Open masters games', city: 'Abu-Dhabi' },
-					{ distance: '50m', date: '2026-02-21', result: 27.28, event: 'Open masters games', city: 'Abu-Dhabi' },
+                    { distance: '50m', date: '2024-03-02', result: 27.98, event: 'ЧМ', city: 'Доха' , videoUrl: 'https://rutube.ru/video/fa5d0ba77064626bbec4b14957c8c301/'},
+                    { distance: '50m', date: '2024-04-06', result: 27.21, event: 'Кубок России', city: 'Обнинск', videoUrl:'https://rutube.ru/video/0f0aeaef2103341dcc8d5e5362bd185a/' },
+                    { distance: '50m', date: '2024-04-07', result: 27.41, event: 'Кубок России', city: 'Обнинск', videoUrl:'https://rutube.ru/video/78a669802cdbcfb354102ae386470304/' },
+                    { distance: '50m', date: '2024-04-07', result: 27.23, event: 'Кубок России', city: 'Обнинск', videoUrl:'https://rutube.ru/video/a4fe528583f9813b1ca5fb70c7249b4c/' },
+                    { distance: '50m', date: '2024-06-15', result: 27.55, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/f4a48551a60739782a7639304143378a/' },
+                    { distance: '50m', date: '2024-06-16', result: 27.55, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/2397316d2e7c61e069de6121ea6d209a/' },
+                    { distance: '50m', date: '2024-06-16', result: 27.33, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/d4922b1464f746ee7a5ce70b775f0bbc/' },
+                    { distance: '50m', date: '2024-09-21', result: 27.35, event: 'СахМастерс', city: 'Южно-Сахалинск', videoUrl: 'https://rutube.ru/video/private/b721d0bdb9ec59df03f7221ab85ae4e2/?p=9k7gx-VNONRPV0ydZnSZaw' },
+                    { distance: '50m', date: '2024-09-21', result: 27.54, event: 'СахМастерс', city: 'Южно-Сахалинск', videoUrl: '' },
+                    { distance: '50m', date: '2025-03-28', result: 27.90, event: 'Чемпионат России', city: 'Казань', videoUrl: '' },
+                    { distance: '50m', date: '2025-03-28', result: 27.79, event: 'Чемпионат России', city: 'Казань' , videoUrl: 'https://rutube.ru/video/2da837a5816cda8f01b43e5d2eec2f42/'},
+                    { distance: '50m', date: '2025-03-29', result: 27.76, event: 'Чемпионат России', city: 'Казань', videoUrl: 'https://rutube.ru/video/2808098ad5c5decf32e2535f829d5256/' },
+                    { distance: '50m', date: '2025-06-07', result: 27.95, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: '' },
+                    { distance: '50m', date: '2025-06-08', result: 27.97, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: '' },
+                    { distance: '50m', date: '2025-06-08', result: 27.91, event: 'Открытый Петербург', city: 'Санкт-Петербург' , videoUrl: ''},
+                    { distance: '50m', date: '2025-08-13', result: 27.25, event: 'ЧМ Мастерс', city: 'Сингапур', videoUrl: '' , videoUrl: ''},
+                    { distance: '50m', date: '2025-08-13', result: 27.31, event: 'ЧМ Мастерс', city: 'Сингапур', videoUrl: '' , videoUrl: ''},
+                    { distance: '50m', date: '2025-08-13', result: 26.99, event: 'ЧМ Мастерс', city: 'Сингапур', videoUrl: '', videoUrl: '' },
+					{ distance: '50m', date: '2026-02-11', result: 27.27, event: 'Open masters games', city: 'Abu-Dhabi', videoUrl: '' },
+					{ distance: '50m', date: '2026-02-21', result: 27.28, event: 'Open masters games', city: 'Abu-Dhabi', videoUrl: '' },
                     // 100 м на спине
-                    { distance: '100m', date: '2024-02-28', result: 61.36, event: 'ЧМ', city: 'Доха' },
-                    { distance: '100m', date: '2024-04-03', result: 60.64, event: 'Кубок России', city: 'Казань' },
-                    { distance: '100m', date: '2024-09-20', result: 60.88, event: 'СахМастерс', city: 'Южно-Сахалинск' },
-                    { distance: '100m', date: '2025-03-28', result: 61.57, event: 'Чемпионат России', city: 'Обнинск' },
-                    { distance: '100m', date: '2025-06-07', result: 63.91, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
-                    { distance: '100m', date: '2025-08-12', result: 59.99, event: 'ЧМ Мастерс', city: 'Сингапур' },
-					{ distance: '100m', date: '2026-02-10', result: 60.78, event: 'Open masters games', city: 'Abu-Dhabi' }
+                    { distance: '100m', date: '2024-02-28', result: 61.36, event: 'ЧМ', city: 'Доха', videoUrl: 'https://rutube.ru/video/cc311fd26cb2b313ea5cf79d7c2441e6/' },
+                    { distance: '100m', date: '2024-04-03', result: 60.64, event: 'Кубок России', city: 'Обнинск', videoUrl: 'https://rutube.ru/video/16ee70f8843276727e6e92ba16fd5750/'},
+                    { distance: '100m', date: '2024-09-20', result: 60.88, event: 'СахМастерс', city: 'Южно-Сахалинск', videoUrl: 'https://rutube.ru/video/private/7eba443e8b261056eca05049542b1b61/?p=HyJKuUnl5Kjz5dnoYNi2ng' },
+                    { distance: '100m', date: '2025-03-28', result: 61.57, event: 'Чемпионат России', city: 'Казань', videoUrl: 'https://rutube.ru/video/1d75c1f2cf84207e64abc5688e8f848c/' },
+                    { distance: '100m', date: '2025-06-07', result: 63.91, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/164909cceafa248e6f230de8a549e218/' },
+                    { distance: '100m', date: '2025-08-12', result: 59.99, event: 'ЧМ Мастерс', city: 'Сингапур', videoUrl: '' },
+					{ distance: '100m', date: '2026-02-10', result: 60.78, event: 'Open masters games', city: 'Abu-Dhabi', videoUrl: '' }
                 ]
             };
 
@@ -772,12 +783,12 @@
                     // Проходим по результатам в том же порядке, как они объявлены в массиве
                     discResults.forEach(r => {
                         const isBest = (r.result === bestResults[disc.id]);
-                        html += `<div class="results-grid-row ${isBest ? 'best-result' : ''}">`;
-                        html += `<span><strong>${r.event}</strong></span>`;
-                        html += `<span>${new Date(r.date).getFullYear()}</span>`;
-                        html += `<span>${r.city}</span>`;
-                        html += `<span class="result-time">${formatTime(r.result)}</span>`;
-                        html += `</div>`;
+							html += `<div class="results-grid-row ${isBest ? 'best-result' : ''}">`;
+							html += `<span><strong>${r.event}</strong>${r.videoUrl ? ' <a href="' + r.videoUrl + '" target="_blank" class="video-link">📹</a>' : ''}</span>`;
+							html += `<span>${new Date(r.date).getFullYear()}</span>`;
+							html += `<span>${r.city}</span>`;
+							html += `<span class="result-time">${formatTime(r.result)}</span>`;
+							html += `</div>`;
                     });
 
                     html += `</div></div>`;
