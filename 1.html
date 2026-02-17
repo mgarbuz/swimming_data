@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Михаил Гарбуз — прогресс результатов</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7fa;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Фиолетовая шапка */
+        .header {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            padding: 28px 32px;
+            color: white;
+        }
+
+        .breadcrumb {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 16px;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+        }
+
+        .breadcrumb span {
+            font-weight: 500;
+        }
+
+        .athlete-title {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .athlete-meta {
+            display: flex;
+            gap: 32px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            background: rgba(255,255,255,0.15);
+            padding: 16px 24px;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+            width: fit-content;
+        }
+
+        .athlete-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Основной контент */
+        .content {
+            padding: 32px;
+            background: white;
+        }
+
+        /* Заголовок раздела и переключатели */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .pool-tabs {
+            display: flex;
+            gap: 10px;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 40px;
+        }
+
+        .pool-tab {
+            padding: 8px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+            color: #475569;
+        }
+
+        .pool-tab.active {
+            background: white;
+            color: #7c3aed;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Таблица лучших результатов */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+            margin-bottom: 24px;
+        }
+
+        .results-table th {
+            text-align: left;
+            padding: 20px 20px 12px 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #64748b;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .results-table td {
+            padding: 12px 20px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 1rem;
+        }
+
+        .results-table tbody tr:hover td {
+            background-color: #faf9ff;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #0f172a;
+            font-family: 'SF Mono', 'Courier New', monospace;
+            background: #f1f0ff;
+            padding: 6px 16px;
+            border-radius: 40px;
+            display: inline-block;
+            font-size: 1rem;
+        }
+
+        .no-data {
+            color: #94a3b8;
+            font-style: italic;
+            padding: 6px 16px;
+        }
+
+        .view-all-btn {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .view-all-btn button {
+            color: #7c3aed;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s;
+            padding: 0;
+        }
+
+        .view-all-btn button:hover {
+            border-bottom-color: #7c3aed;
+        }
+
+        /* Стили для блока "Все результаты" */
+        .detailed-results {
+            margin-top: 40px;
+            display: none;
+        }
+
+        .detailed-results.visible {
+            display: block;
+        }
+
+        .detailed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #7c3aed;
+        }
+
+        .detailed-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .discipline-filter {
+            display: flex;
+            gap: 10px;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 40px;
+        }
+
+        .discipline-btn {
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: #475569;
+        }
+
+        .discipline-btn.active {
+            background: white;
+            color: #7c3aed;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .discipline-section {
+            margin-bottom: 40px;
+        }
+
+        .discipline-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #0f172a;
+            text-align: center;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed #7c3aed40;
+        }
+
+        .results-grid {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+
+        .results-grid-header {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1.5fr 1fr;
+            padding: 16px 24px;
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .results-grid-row {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1.5fr 1fr;
+            padding: 14px 24px;
+            border-bottom: 1px solid #edf2f7;
+            transition: background-color 0.2s;
+        }
+
+        .results-grid-row:hover {
+            background-color: #faf9ff;
+        }
+
+        .results-grid-row.best-result {
+            background-color: #f1f0ff;
+            border-left: 4px solid #7c3aed;
+        }
+
+        .results-grid-row.best-result .result-time {
+            color: #7c3aed;
+            font-weight: 700;
+        }
+
+        .result-time {
+            font-weight: 600;
+            color: #0f172a;
+            font-family: 'SF Mono', monospace;
+        }
+
+        /* Блок с графиками прогресса */
+        .progress-section {
+            margin-top: 48px;
+            border-top: 2px dashed #cbd5e1;
+            padding-top: 32px;
+        }
+
+        .progress-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 24px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .chart-card.clickable:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(124, 58, 237, 0.1);
+        }
+
+        .chart-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 180px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .line-graph {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-note {
+            font-size: 0.8rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 12px;
+            font-style: italic;
+        }
+
+        .no-data-message {
+            text-align: center;
+            color: #94a3b8;
+            padding: 40px 0;
+            font-style: italic;
+        }
+
+        /* Стили для панелей детализации */
+        .detail-panel {
+            margin-top: 30px;
+            padding: 24px;
+            background: #f1f5f9;
+            border-radius: 24px;
+            border: 2px solid #7c3aed20;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .detail-header h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .close-btn {
+            background: white;
+            border: none;
+            font-size: 24px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .close-btn:hover {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .detail-chart-container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 350px;
+        }
+
+        .detail-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 16px;
+            padding: 12px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 16px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 0.95rem;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-item .date {
+            color: #475569;
+            font-weight: 500;
+            min-width: 100px;
+        }
+
+        .detail-item .result {
+            font-weight: 700;
+            color: #7c3aed;
+            font-family: 'SF Mono', monospace;
+            min-width: 70px;
+        }
+
+        .detail-item .event {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-left: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .header { padding: 20px; }
+            .athlete-title { font-size: 2rem; }
+            .athlete-meta { flex-direction: column; gap: 10px; border-radius: 30px; }
+            .section-header { flex-direction: column; align-items: stretch; }
+            .pool-tabs { justify-content: center; }
+            .results-grid-header, .results-grid-row { 
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+                font-size: 0.9rem;
+                padding: 12px;
+                gap: 8px;
+            }
+            .charts-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 500px) {
+            .results-grid-header, .results-grid-row { 
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+            .results-grid-header span:not(:first-child) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Фиолетовая шапка -->
+        <div class="header">
+            <h1 class="athlete-title">Михаил Гарбуз</h1>
+            <div class="athlete-meta">
+                <span>Год рождения: 1997</span>
+                <span>Клуб: Енисей</span>
+            </div>
+        </div>
+
+        <!-- Основной блок с лучшими результатами -->
+        <div class="content">
+            <div class="section-header">
+                <h2>Лучшие результаты</h2>
+                <div class="pool-tabs" role="tablist">
+                    <button class="pool-tab active" role="tab" aria-selected="true">25 м</button>
+                    <button class="pool-tab" role="tab" aria-selected="false">50 м</button>
+                </div>
+            </div>
+
+            <!-- Таблица лучших результатов (25 м) -->
+            <table class="results-table" id="best25">
+                <thead>
+                    <tr>
+                        <th>Дистанция</th>
+                        <th>Год</th>
+                        <th>Результат</th>
+                    </tr>
+                </thead>
+                <tbody id="best25Body"></tbody>
+            </table>
+
+            <!-- Таблица лучших результатов (50 м) -->
+            <table class="results-table" id="best50" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Дистанция</th>
+                        <th>Год</th>
+                        <th>Результат</th>
+                    </tr>
+                </thead>
+                <tbody id="best50Body"></tbody>
+            </table>
+
+            <div class="view-all-btn">
+                <button id="viewAllBtn">Смотреть все результаты →</button>
+            </div>
+
+            <!-- Детальный блок со всеми результатами -->
+            <div id="detailedResults" class="detailed-results">
+                <div class="detailed-header">
+                    <h3>Все результаты</h3>
+                    <div class="discipline-filter" id="disciplineFilter">
+                        <button class="discipline-btn active" data-discipline="all">Все дисциплины</button>
+                        <button class="discipline-btn" data-discipline="50m">50 м</button>
+                        <button class="discipline-btn" data-discipline="100m">100 м</button>
+                        <button class="discipline-btn" data-discipline="200m">200 м</button>
+                    </div>
+                </div>
+                
+                <!-- Контейнер для результатов с группировкой по дисциплинам -->
+                <div id="detailedResultsContainer"></div>
+            </div>
+
+            <!-- Блок с графиками прогресса -->
+            <div class="progress-section">
+                <h3 class="progress-title">Динамика результатов</h3>
+                <div class="charts-grid" id="chartsGrid"></div>
+                
+                <!-- Панели с подробными точечными диаграммами -->
+                <div id="detailPanel50" class="detail-panel" style="display: none;">
+                    <div class="detail-header">
+                        <h4>50 м на спине — все результаты</h4>
+                        <button class="close-btn" data-close="50">×</button>
+                    </div>
+                    <div class="detail-chart-container">
+                        <canvas id="detailChart50" width="800" height="300"></canvas>
+                    </div>
+                    <div class="detail-list" id="detailList50"></div>
+                </div>
+
+                <div id="detailPanel100" class="detail-panel" style="display: none;">
+                    <div class="detail-header">
+                        <h4>100 м на спине — все результаты</h4>
+                        <button class="close-btn" data-close="100">×</button>
+                    </div>
+                    <div class="detail-chart-container">
+                        <canvas id="detailChart100" width="800" height="300"></canvas>
+                    </div>
+                    <div class="detail-list" id="detailList100"></div>
+                </div>
+
+                <div id="detailPanel200" class="detail-panel" style="display: none;">
+                    <div class="detail-header">
+                        <h4>200 м на спине — все результаты</h4>
+                        <button class="close-btn" data-close="200">×</button>
+                    </div>
+                    <div class="detail-chart-container">
+                        <canvas id="detailChart200" width="800" height="300"></canvas>
+                    </div>
+                    <div class="detail-list" id="detailList200"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем Chart.js и адаптер для дат (совместимые версии) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+    <script>
+        (function() {
+            // --- ИСХОДНЫЕ ДАННЫЕ ---
+            const allResults = {
+                '25': [
+                    // 50 м на спине
+                    { distance: '50m', date: '2023-11-11', result: 26.25, event: 'XXX Открытый Кубок России', city: 'Казань' },
+                    { distance: '50m', date: '2023-11-12', result: 26.33, event: 'XXX Открытый Кубок России', city: 'Казань' },
+                    { distance: '50m', date: '2023-11-12', result: 26.22, event: 'XXX Открытый Кубок России', city: 'Казань' },
+                    { distance: '50m', date: '2024-11-23', result: 26.11, event: 'XXXI Открытый Кубок России', city: 'Казань' },
+                    { distance: '50m', date: '2024-11-24', result: 26.09, event: 'XXXI Открытый Кубок России', city: 'Казань' },
+                    { distance: '50m', date: '2024-11-24', result: 26.10, event: 'XXXI Открытый Кубок России', city: 'Казань' },
+                    { distance: '50m', date: '2025-11-29', result: 25.91, event: 'XXXII Открытый Кубок России', city: 'Казань' },
+                    { distance: '50m', date: '2025-11-30', result: 25.87, event: 'XXXII Открытый Кубок России', city: 'Казань' },
+                    { distance: '50m', date: '2025-11-30', result: 25.54, event: 'XXXII Открытый Кубок России', city: 'Казань' },
+                    // 100 м на спине
+                    { distance: '100m', date: '2023-11-10', result: 57.45, event: 'XXX Открытый Кубок России', city: 'Казань' },
+                    { distance: '100m', date: '2024-11-22', result: 57.50, event: 'XXXI Открытый Кубок России', city: 'Казань' },
+                    { distance: '100m', date: '2025-11-28', result: 56.76, event: 'XXXII Открытый Кубок России', city: 'Казань' },
+                    // 200 м на спине
+                    { distance: '200m', date: '2024-11-21', result: 132.04, event: 'XXXI Открытый Кубок России', city: 'Казань' }
+                ],
+                '50': [
+                    // 50 м на спине
+                    { distance: '50m', date: '2024-03-01', result: 27.44, event: 'ЧМ', city: 'Доха' },
+                    { distance: '50m', date: '2024-03-01', result: 27.80, event: 'ЧМ', city: 'Доха' },
+                    { distance: '50m', date: '2024-03-02', result: 27.98, event: 'ЧМ', city: 'Доха' },
+                    { distance: '50m', date: '2024-04-06', result: 27.21, event: 'Кубок России', city: 'Казань' },
+                    { distance: '50m', date: '2024-04-07', result: 27.41, event: 'Кубок России', city: 'Казань' },
+                    { distance: '50m', date: '2024-04-07', result: 27.23, event: 'Кубок России', city: 'Казань' },
+                    { distance: '50m', date: '2024-06-15', result: 27.55, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
+                    { distance: '50m', date: '2024-06-16', result: 27.55, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
+                    { distance: '50m', date: '2024-06-16', result: 27.33, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
+                    { distance: '50m', date: '2024-09-21', result: 27.35, event: 'СахМастерс', city: 'Южно-Сахалинск' },
+                    { distance: '50m', date: '2024-09-21', result: 27.54, event: 'СахМастерс', city: 'Южно-Сахалинск' },
+                    { distance: '50m', date: '2025-03-28', result: 27.90, event: 'Чемпионат России', city: 'Обнинск' },
+                    { distance: '50m', date: '2025-03-28', result: 27.79, event: 'Чемпионат России', city: 'Обнинск' },
+                    { distance: '50m', date: '2025-03-29', result: 27.76, event: 'Чемпионат России', city: 'Обнинск' },
+                    { distance: '50m', date: '2025-06-07', result: 27.95, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
+                    { distance: '50m', date: '2025-06-08', result: 27.97, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
+                    { distance: '50m', date: '2025-06-08', result: 27.91, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
+                    { distance: '50m', date: '2025-08-13', result: 27.25, event: 'ЧМ Мастерс', city: 'Сингапур' },
+                    { distance: '50m', date: '2025-08-13', result: 27.31, event: 'ЧМ Мастерс', city: 'Сингапур' },
+                    { distance: '50m', date: '2025-08-13', result: 26.99, event: 'ЧМ Мастерс', city: 'Сингапур' },
+					{ distance: '50m', date: '2026-02-11', result: 27.27, event: 'Open masters games', city: 'Abu-Dhabi' },
+					{ distance: '50m', date: '2026-02-21', result: 27.28, event: 'Open masters games', city: 'Abu-Dhabi' },
+                    // 100 м на спине
+                    { distance: '100m', date: '2024-02-28', result: 61.36, event: 'ЧМ', city: 'Доха' },
+                    { distance: '100m', date: '2024-04-03', result: 60.64, event: 'Кубок России', city: 'Казань' },
+                    { distance: '100m', date: '2024-09-20', result: 60.88, event: 'СахМастерс', city: 'Южно-Сахалинск' },
+                    { distance: '100m', date: '2025-03-28', result: 61.57, event: 'Чемпионат России', city: 'Обнинск' },
+                    { distance: '100m', date: '2025-06-07', result: 63.91, event: 'Открытый Петербург', city: 'Санкт-Петербург' },
+                    { distance: '100m', date: '2025-08-12', result: 59.99, event: 'ЧМ Мастерс', city: 'Сингапур' },
+					{ distance: '100m', date: '2026-02-10', result: 60.78, event: 'Open masters games', city: 'Abu-Dhabi' }
+                ]
+            };
+
+            // Форматирование даты
+            function formatDate(dateStr) {
+                const d = new Date(dateStr);
+                return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            }
+
+            // Форматирование времени
+            function formatTime(seconds) {
+                if (!seconds && seconds !== 0) return '—';
+                const mins = Math.floor(seconds / 60);
+                const secs = (seconds % 60).toFixed(2);
+                return `${mins.toString().padStart(2, '0')}:${secs.padStart(5, '0')}`;
+            }
+
+            // Получение лучшего результата за год для дистанции
+            function getBestByYear(poolType, distance) {
+                const results = allResults[poolType].filter(r => r.distance === distance);
+                if (results.length === 0) return {};
+                
+                const byYear = {};
+                results.forEach(r => {
+                    const year = new Date(r.date).getFullYear();
+                    if (!byYear[year] || r.result < byYear[year]) {
+                        byYear[year] = r.result;
+                    }
+                });
+                return byYear;
+            }
+
+            // Обновление таблиц лучших результатов
+            function updateBestTables() {
+                const best25Body = document.getElementById('best25Body');
+                const best50Body = document.getElementById('best50Body');
+                
+                // 25 м
+                const best25_50 = getBestByYear('25', '50m');
+                const best25_100 = getBestByYear('25', '100m');
+                const best25_200 = getBestByYear('25', '200m');
+                
+                best25Body.innerHTML = `
+                    <tr><td>50 м на спине</td><td>2025</td><td><span class="result-value">${formatTime(best25_50['2025'])}</span></td></tr>
+                    <tr><td>100 м на спине</td><td>2025</td><td><span class="result-value">${formatTime(best25_100['2025'])}</span></td></tr>
+                    <tr><td>200 м на спине</td><td>2024</td><td><span class="result-value">${formatTime(best25_200['2024'])}</span></td></tr>
+                `;
+                
+                // 50 м
+                const best50_50 = getBestByYear('50', '50m');
+                const best50_100 = getBestByYear('50', '100m');
+                const best50_200 = getBestByYear('50', '200m');
+                
+                let best50_200_html = (best50_200 && best50_200['2025']) ? 
+                    `<span class="result-value">${formatTime(best50_200['2025'])}</span>` : 
+                    '<span class="no-data">нет данных</span>';
+                
+                best50Body.innerHTML = `
+                    <tr><td>50 м на спине</td><td>2025</td><td><span class="result-value">${formatTime(best50_50['2025'])}</span></td></tr>
+                    <tr><td>100 м на спине</td><td>2025</td><td><span class="result-value">${formatTime(best50_100['2025'])}</span></td></tr>
+                    <tr><td>200 м на спине</td><td>—</td><td>${best50_200_html}</td></tr>
+                `;
+            }
+
+            // Отрисовка детального блока с результатами (с сохранением порядка)
+            function renderDetailedResults(poolType, filterDiscipline = 'all') {
+                const container = document.getElementById('detailedResultsContainer');
+                const results = allResults[poolType];
+                
+                // Группируем по дисциплинам, СОХРАНЯЯ ИСХОДНЫЙ ПОРЯДОК
+                const grouped = {
+                    '50m': results.filter(r => r.distance === '50m'),
+                    '100m': results.filter(r => r.distance === '100m'),
+                    '200m': results.filter(r => r.distance === '200m')
+                };
+
+                // Находим лучший результат для каждой дисциплины
+                const bestResults = {
+                    '50m': grouped['50m'].length ? Math.min(...grouped['50m'].map(r => r.result)) : null,
+                    '100m': grouped['100m'].length ? Math.min(...grouped['100m'].map(r => r.result)) : null,
+                    '200m': grouped['200m'].length ? Math.min(...grouped['200m'].map(r => r.result)) : null
+                };
+
+                const disciplines = [
+                    { id: '50m', name: '50 м на спине' },
+                    { id: '100m', name: '100 м на спине' },
+                    { id: '200m', name: '200 м на спине' }
+                ];
+
+                let html = '';
+                
+                for (const disc of disciplines) {
+                    if (filterDiscipline !== 'all' && filterDiscipline !== disc.id) continue;
+                    
+                    const discResults = grouped[disc.id];
+                    if (discResults.length === 0) {
+                        if (filterDiscipline !== 'all') {
+                            html += `<div class="discipline-section"><div class="discipline-title">${disc.name}</div>`;
+                            html += '<div class="no-data-message">Нет данных для отображения</div></div>';
+                        }
+                        continue;
+                    }
+
+                    html += `<div class="discipline-section">`;
+                    html += `<div class="discipline-title">${disc.name}</div>`;
+                    html += `<div class="results-grid">`;
+                    html += `<div class="results-grid-header">`;
+                    html += `<span>Соревнование</span><span>Год</span><span>Город</span><span>Результат</span>`;
+                    html += `</div>`;
+
+                    // Проходим по результатам в том же порядке, как они объявлены в массиве
+                    discResults.forEach(r => {
+                        const isBest = (r.result === bestResults[disc.id]);
+                        html += `<div class="results-grid-row ${isBest ? 'best-result' : ''}">`;
+                        html += `<span><strong>${r.event}</strong></span>`;
+                        html += `<span>${new Date(r.date).getFullYear()}</span>`;
+                        html += `<span>${r.city}</span>`;
+                        html += `<span class="result-time">${formatTime(r.result)}</span>`;
+                        html += `</div>`;
+                    });
+
+                    html += `</div></div>`;
+                }
+
+                container.innerHTML = html;
+            }
+
+            // Данные для графиков
+            function getChartData(poolType) {
+                return {
+                    '50m': getBestByYear(poolType, '50m'),
+                    '100m': getBestByYear(poolType, '100m'),
+                    '200m': getBestByYear(poolType, '200m')
+                };
+            }
+
+            // Создание линейного графика с ФИКСИРОВАННЫМ МАСШТАБОМ
+            function createLineChart(containerId, data) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                const years = ['2023', '2024', '2025'];
+                const values = years.map(y => data[y] || null);
+                
+                // Проверяем, есть ли хоть одно значение
+                if (values.every(v => v === null)) {
+                    container.innerHTML = '<div class="no-data-message">Нет данных</div>';
+                    return;
+                }
+                
+                // Находим мин и макс для масштабирования (игнорируем null)
+                const existingValues = values.filter(v => v !== null);
+                const maxVal = Math.max(...existingValues) * 1.1;
+                const minVal = Math.min(...existingValues) * 0.9;
+                const range = maxVal - minVal;
+                
+                // Создаем точки для каждого года (даже если данных нет, точка не рисуется)
+                const points = [];
+                for (let i = 0; i < years.length; i++) {
+                    if (values[i] !== null) {
+                        const x = 30 + i * 80;
+                        const y = 140 - ((values[i] - minVal) / range) * 100;
+                        points.push({ x, y, value: values[i], year: years[i] });
+                    }
+                }
+
+                // Линия рисуется только если есть минимум 2 точки
+                let lineElement = '';
+                if (points.length > 1) {
+                    lineElement = `<polyline points="${points.map(p => `${p.x},${p.y}`).join(' ')}" fill="none" stroke="#7c3aed" stroke-width="2.5" />`;
+                }
+
+                // Строим SVG с фиксированными позициями для всех годов
+                const svg = `
+                    <svg class="line-graph" viewBox="0 0 260 160" preserveAspectRatio="xMidYMid meet">
+                        <line x1="20" y1="140" x2="240" y2="140" stroke="#cbd5e1" stroke-width="1" />
+                        <line x1="20" y1="20" x2="20" y2="140" stroke="#cbd5e1" stroke-width="1" />
+                        ${lineElement}
+                        ${points.map(p => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="white" stroke="#7c3aed" stroke-width="2" />`).join('')}
+                        ${years.map((year, i) => `<text x="${20 + i * 80}" y="158" font-size="8" fill="#475569">${year}</text>`).join('')}
+                        ${points.map(p => `<text x="${p.x - 15}" y="${p.y - 8}" font-size="7" fill="#7c3aed" font-weight="bold">${p.value.toFixed(2)}</text>`).join('')}
+                    </svg>
+                `;
+
+                container.innerHTML = svg;
+            }
+
+            // Обновление графиков
+            function updateCharts(poolType) {
+                const data = getChartData(poolType);
+                const chartsGrid = document.getElementById('chartsGrid');
+                
+                chartsGrid.innerHTML = '';
+                
+                // 50 м
+                const card50 = document.createElement('div');
+                card50.className = 'chart-card clickable';
+                card50.id = 'chart-card-50m';
+                card50.innerHTML = `
+                    <h3>50 м на спине</h3>
+                    <div class="chart-container" id="chart50m"></div>
+                    <div class="chart-note">${getNote(data['50m'])}</div>
+                `;
+                chartsGrid.appendChild(card50);
+                
+                // 100 м
+                const card100 = document.createElement('div');
+                card100.className = 'chart-card clickable';
+                card100.id = 'chart-card-100m';
+                card100.innerHTML = `
+                    <h3>100 м на спине</h3>
+                    <div class="chart-container" id="chart100m"></div>
+                    <div class="chart-note">${getNote(data['100m'])}</div>
+                `;
+                chartsGrid.appendChild(card100);
+                
+                // 200 м
+                const card200 = document.createElement('div');
+                card200.className = 'chart-card clickable';
+                card200.id = 'chart-card-200m';
+                card200.innerHTML = `
+                    <h3>200 м на спине</h3>
+                    <div class="chart-container" id="chart200m"></div>
+                    <div class="chart-note">${getNote(data['200m'])}</div>
+                `;
+                chartsGrid.appendChild(card200);
+                
+                // Рисуем графики
+                createLineChart('chart50m', data['50m']);
+                createLineChart('chart100m', data['100m']);
+                createLineChart('chart200m', data['200m']);
+                
+                // Добавляем обработчики клика
+                document.getElementById('chart-card-50m').addEventListener('click', () => showDetailedChart(poolType, '50m'));
+                document.getElementById('chart-card-100m').addEventListener('click', () => showDetailedChart(poolType, '100m'));
+                document.getElementById('chart-card-200m').addEventListener('click', () => showDetailedChart(poolType, '200m'));
+            }
+
+            function getNote(data) {
+                if (data['2023'] && data['2025']) {
+                    return `⬇️ ${(data['2023'] - data['2025']).toFixed(2)} сек за 2 года`;
+                }
+                return 'Недостаточно данных для анализа';
+            }
+
+            // Показ подробной точечной диаграммы (С ПРАВИЛЬНЫМ ВРЕМЕННЫМ МАСШТАБОМ)
+            let charts = {};
+
+            function showDetailedChart(poolType, distance) {
+                const panel = document.getElementById(`detailPanel${distance.replace('m', '')}`);
+                const list = document.getElementById(`detailList${distance.replace('m', '')}`);
+                const canvasId = `detailChart${distance.replace('m', '')}`;
+                
+                const results = allResults[poolType]
+                    .filter(r => r.distance === distance); // БЕЗ СОРТИРОВКИ - сохраняем порядок из массива
+                
+                if (results.length === 0) {
+                    list.innerHTML = '<div class="detail-item">Нет данных для отображения</div>';
+                    if (charts[distance]) charts[distance].destroy();
+                    panel.style.display = 'block';
+                    return;
+                }
+                
+                list.innerHTML = results.map(r => `
+                    <div class="detail-item">
+                        <span class="date">${formatDate(r.date)}</span>
+                        <span class="result">${r.result.toFixed(2)}</span>
+                        <span class="event">${r.event}, ${r.city}</span>
+                    </div>
+                `).join('');
+                
+                if (charts[distance]) charts[distance].destroy();
+                
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                charts[distance] = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'Результат (сек)',
+                            data: results.map(r => ({ 
+                                x: new Date(r.date).getTime(), // Используем timestamp для правильного масштаба
+                                y: r.result 
+                            })),
+                            backgroundColor: '#7c3aed',
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'month',
+                                    displayFormats: {
+                                        month: 'MMM yyyy'
+                                    },
+                                    tooltipFormat: 'dd MMM yyyy'
+                                },
+                                title: { 
+                                    display: true, 
+                                    text: 'Дата'
+                                },
+                                ticks: {
+                                    maxRotation: 45,
+                                    minRotation: 45
+                                }
+                            },
+                            y: {
+                                title: { 
+                                    display: true, 
+                                    text: 'Время (сек)' 
+                                },
+                                reverse: true,
+                                beginAtZero: false
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        const r = results[context.dataIndex];
+                                        return [
+                                            `Результат: ${r.result.toFixed(2)} сек`,
+                                            `Соревнование: ${r.event}`,
+                                            `Город: ${r.city}`,
+                                            `Дата: ${formatDate(r.date)}`
+                                        ];
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+                
+                // Скрываем другие панели
+                ['50', '100', '200'].forEach(d => {
+                    if (d !== distance.replace('m', '')) {
+                        document.getElementById(`detailPanel${d}`).style.display = 'none';
+                    }
+                });
+                
+                panel.style.display = 'block';
+            }
+
+            // Переключение вкладок
+            const tabs = document.querySelectorAll('.pool-tab');
+            const best25 = document.getElementById('best25');
+            const best50 = document.getElementById('best50');
+            const detailedResults = document.getElementById('detailedResults');
+            
+            function activateTab(selected) {
+                tabs.forEach(tab => tab.classList.remove('active'));
+                selected.classList.add('active');
+
+                const is25 = selected.textContent.includes('25');
+                const poolType = is25 ? '25' : '50';
+                
+                best25.style.display = is25 ? 'table' : 'none';
+                best50.style.display = is25 ? 'none' : 'table';
+                
+                if (detailedResults.classList.contains('visible')) {
+                    const activeFilter = document.querySelector('.discipline-btn.active').dataset.discipline;
+                    renderDetailedResults(poolType, activeFilter);
+                }
+                
+                updateCharts(poolType);
+                
+                // Скрываем все детальные панели
+                ['50', '100', '200'].forEach(d => {
+                    document.getElementById(`detailPanel${d}`).style.display = 'none';
+                });
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => activateTab(tab));
+            });
+
+            // Кнопка "Смотреть все результаты"
+            const viewAllBtn = document.getElementById('viewAllBtn');
+            
+            viewAllBtn.addEventListener('click', function() {
+                if (detailedResults.classList.contains('visible')) {
+                    detailedResults.classList.remove('visible');
+                    viewAllBtn.textContent = 'Смотреть все результаты →';
+                } else {
+                    detailedResults.classList.add('visible');
+                    viewAllBtn.textContent = 'Скрыть подробности ←';
+                    
+                    const activeTab = document.querySelector('.pool-tab.active');
+                    const is25 = activeTab.textContent.includes('25');
+                    const activeFilter = document.querySelector('.discipline-btn.active').dataset.discipline;
+                    renderDetailedResults(is25 ? '25' : '50', activeFilter);
+                }
+            });
+
+            // Фильтр по дисциплинам
+            const filterBtns = document.querySelectorAll('.discipline-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    if (detailedResults.classList.contains('visible')) {
+                        const activeTab = document.querySelector('.pool-tab.active');
+                        const is25 = activeTab.textContent.includes('25');
+                        renderDetailedResults(is25 ? '25' : '50', this.dataset.discipline);
+                    }
+                });
+            });
+
+            // Закрытие детальных панелей
+            document.querySelectorAll('.close-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const distance = this.dataset.close;
+                    document.getElementById(`detailPanel${distance}`).style.display = 'none';
+                });
+            });
+
+            // Инициализация
+            updateBestTables();
+            updateCharts('25');
+        })();
+    </script>
+</body>
+</html>
