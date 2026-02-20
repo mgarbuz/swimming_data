@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Михаил Гарбуз — прогресс результатов</title>
     <style>
+		.protocol-link {
+		display: inline-block;
+		margin-left: 8px;
+		text-decoration: none;
+		font-size: 1.2rem;
+		transition: transform 0.2s;
+	}
+
+	.protocol-link:hover {
+		transform: scale(1.2);
+	}
+
 		.video-link {
 			display: inline-block;
 			margin-left: 8px;
@@ -610,69 +622,77 @@
                 </div>
             </div>
         </div>
+		    <!-- Блок со ссылками на протоколы по годам - теперь отдельно от container -->
+    <div style="max-width: 1000px; margin: 20px auto 0; padding: 0 20px;">
+ <!-- Блок со ссылками на протоколы по годам -->
+    <div class="protocols-footer">
+        <h3 class="protocols-footer-title">📋 Протоколы соревнований</h3>
+        <div class="protocols-years" id="protocolsYears"></div>
     </div>
 
-    <!-- Подключаем Chart.js и адаптер для дат (совместимые версии) -->
+    <!-- Подключаем Chart.js и адаптер для дат -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-
+	
     <script>
-        (function() {
-            // --- ИСХОДНЫЕ ДАННЫЕ ---
-            const allResults = {
-                '25': [
-                    // 50 м на спине
-                    { distance: '50m', date: '2023-11-11', result: 26.25, event: 'XXX Открытый Кубок России', city: 'Казань' },
-                    { distance: '50m', date: '2023-11-12', result: 26.33, event: 'XXX Открытый Кубок России', city: 'Казань' },
-                    { distance: '50m', date: '2023-11-12', result: 26.22, event: 'XXX Открытый Кубок России', city: 'Казань' },
-                    { distance: '50m', date: '2024-11-23', result: 26.11, event: 'XXXI Открытый Кубок России', city: 'Казань' },
-                    { distance: '50m', date: '2024-11-24', result: 26.09, event: 'XXXI Открытый Кубок России', city: 'Казань' },
-                    { distance: '50m', date: '2024-11-24', result: 26.10, event: 'XXXI Открытый Кубок России', city: 'Казань' },
-                    { distance: '50m', date: '2025-11-29', result: 25.91, event: 'XXXII Открытый Кубок России', city: 'Казань' },
-                    { distance: '50m', date: '2025-11-30', result: 25.87, event: 'XXXII Открытый Кубок России', city: 'Казань' },
-                    { distance: '50m', date: '2025-11-30', result: 25.54, event: 'XXXII Открытый Кубок России', city: 'Казань' },
-                    // 100 м на спине
-                    { distance: '100m', date: '2023-11-10', result: 57.45, event: 'XXX Открытый Кубок России', city: 'Казань' },
-                    { distance: '100m', date: '2024-11-22', result: 57.50, event: 'XXXI Открытый Кубок России', city: 'Казань' },
-                    { distance: '100m', date: '2025-11-28', result: 56.76, event: 'XXXII Открытый Кубок России', city: 'Казань' },
-                    // 200 м на спине
-                    { distance: '200m', date: '2024-11-21', result: 132.04, event: 'XXXI Открытый Кубок России', city: 'Казань' }
-                ],
-                '50': [
-                    // 50 м на спине
-                    { distance: '50m', date: '2024-03-01', result: 27.44, event: 'ЧМ', city: 'Доха' },
-                    { distance: '50m', date: '2024-03-01', result: 27.80, event: 'ЧМ', city: 'Доха' },
-                    { distance: '50m', date: '2024-03-02', result: 27.98, event: 'ЧМ', city: 'Доха' , videoUrl: 'https://rutube.ru/video/fa5d0ba77064626bbec4b14957c8c301/'},
-                    { distance: '50m', date: '2024-04-06', result: 27.21, event: 'Кубок России', city: 'Обнинск', videoUrl:'https://rutube.ru/video/0f0aeaef2103341dcc8d5e5362bd185a/' },
-                    { distance: '50m', date: '2024-04-07', result: 27.41, event: 'Кубок России', city: 'Обнинск', videoUrl:'https://rutube.ru/video/78a669802cdbcfb354102ae386470304/' },
-                    { distance: '50m', date: '2024-04-07', result: 27.23, event: 'Кубок России', city: 'Обнинск', videoUrl:'https://rutube.ru/video/a4fe528583f9813b1ca5fb70c7249b4c/' },
-                    { distance: '50m', date: '2024-06-15', result: 27.55, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/f4a48551a60739782a7639304143378a/' },
-                    { distance: '50m', date: '2024-06-16', result: 27.55, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/2397316d2e7c61e069de6121ea6d209a/' },
-                    { distance: '50m', date: '2024-06-16', result: 27.33, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/d4922b1464f746ee7a5ce70b775f0bbc/' },
-                    { distance: '50m', date: '2024-09-21', result: 27.35, event: 'СахМастерс', city: 'Южно-Сахалинск', videoUrl: 'https://rutube.ru/video/private/b721d0bdb9ec59df03f7221ab85ae4e2/?p=9k7gx-VNONRPV0ydZnSZaw' },
-                    { distance: '50m', date: '2024-09-21', result: 27.54, event: 'СахМастерс', city: 'Южно-Сахалинск', videoUrl: '' },
-                    { distance: '50m', date: '2025-03-28', result: 27.90, event: 'Чемпионат России', city: 'Казань', videoUrl: '' },
-                    { distance: '50m', date: '2025-03-28', result: 27.79, event: 'Чемпионат России', city: 'Казань' , videoUrl: 'https://rutube.ru/video/2da837a5816cda8f01b43e5d2eec2f42/'},
-                    { distance: '50m', date: '2025-03-29', result: 27.76, event: 'Чемпионат России', city: 'Казань', videoUrl: 'https://rutube.ru/video/2808098ad5c5decf32e2535f829d5256/' },
-                    { distance: '50m', date: '2025-06-07', result: 27.95, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: '' },
-                    { distance: '50m', date: '2025-06-08', result: 27.97, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: '' },
-                    { distance: '50m', date: '2025-06-08', result: 27.91, event: 'Открытый Петербург', city: 'Санкт-Петербург' , videoUrl: ''},
-                    { distance: '50m', date: '2025-08-13', result: 27.25, event: 'ЧМ Мастерс', city: 'Сингапур', videoUrl: '' , videoUrl: ''},
-                    { distance: '50m', date: '2025-08-13', result: 27.31, event: 'ЧМ Мастерс', city: 'Сингапур', videoUrl: '' , videoUrl: ''},
-                    { distance: '50m', date: '2025-08-13', result: 26.99, event: 'ЧМ Мастерс', city: 'Сингапур', videoUrl: '', videoUrl: '' },
-					{ distance: '50m', date: '2026-02-11', result: 27.27, event: 'Open masters games', city: 'Abu-Dhabi', videoUrl: '' },
-					{ distance: '50m', date: '2026-02-21', result: 27.28, event: 'Open masters games', city: 'Abu-Dhabi', videoUrl: '' },
-                    // 100 м на спине
-                    { distance: '100m', date: '2024-02-28', result: 61.36, event: 'ЧМ', city: 'Доха', videoUrl: 'https://rutube.ru/video/cc311fd26cb2b313ea5cf79d7c2441e6/' },
-                    { distance: '100m', date: '2024-04-03', result: 60.64, event: 'Кубок России', city: 'Обнинск', videoUrl: 'https://rutube.ru/video/16ee70f8843276727e6e92ba16fd5750/'},
-                    { distance: '100m', date: '2024-09-20', result: 60.88, event: 'СахМастерс', city: 'Южно-Сахалинск', videoUrl: 'https://rutube.ru/video/private/7eba443e8b261056eca05049542b1b61/?p=HyJKuUnl5Kjz5dnoYNi2ng' },
-                    { distance: '100m', date: '2025-03-28', result: 61.57, event: 'Чемпионат России', city: 'Казань', videoUrl: 'https://rutube.ru/video/1d75c1f2cf84207e64abc5688e8f848c/' },
-                    { distance: '100m', date: '2025-06-07', result: 63.91, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/164909cceafa248e6f230de8a549e218/' },
-                    { distance: '100m', date: '2025-08-12', result: 59.99, event: 'ЧМ Мастерс', city: 'Сингапур', videoUrl: '' },
-					{ distance: '100m', date: '2026-02-10', result: 60.78, event: 'Open masters games', city: 'Abu-Dhabi', videoUrl: '' }
-                ]
-            };
+        // Делаем allResults глобальной переменной
+        window.allResults = {
+            '25': [
+                // 50 м на спине
+                { distance: '50m', date: '2023-11-11', result: 26.25, event: 'XXX Открытый Кубок России', city: 'Казань'},
+                { distance: '50m', date: '2023-11-12', result: 26.33, event: 'XXX Открытый Кубок России', city: 'Казань' },
+                { distance: '50m', date: '2023-11-12', result: 26.22, event: 'XXX Открытый Кубок России', city: 'Казань' },
+                { distance: '50m', date: '2024-11-23', result: 26.11, event: 'XXXI Открытый Кубок России', city: 'Казань', videoUrl:'https://rutube.ru/video/89ad3ee0dbeab558ce2b38965eefb5ac/?r=wd'},
+                { distance: '50m', date: '2024-11-24', result: 26.09, event: 'XXXI Открытый Кубок России', city: 'Казань', videoUrl:'https://rutube.ru/video/85682a72efc03a36d3e308b1d4457e19/?r=wd' },
+                { distance: '50m', date: '2024-11-24', result: 26.10, event: 'XXXI Открытый Кубок России', city: 'Казань' , videoUrl:'https://rutube.ru/video/d2887682784d93ab013c7af01f97ffc6/?r=wd'},
+                { distance: '50m', date: '2025-11-29', result: 25.91, event: 'XXXII Открытый Кубок России', city: 'Казань' , videoUrl:'https://rutube.ru/video/a443b784cdb286350d72e6a51d944287/?r=wd'},
+                { distance: '50m', date: '2025-11-30', result: 25.87, event: 'XXXII Открытый Кубок России', city: 'Казань' , videoUrl:'https://rutube.ru/video/b78df36c38756200a3c4a45864dbde2f/?r=wd'},
+                { distance: '50m', date: '2025-11-30', result: 25.54, event: 'XXXII Открытый Кубок России', city: 'Казань' , videoUrl:'https://rutube.ru/video/d7b4190d5fdebf1886a314777d22d35a/?r=wd'},
+                // 100 м на спине
+                { distance: '100m', date: '2023-11-10', result: 57.45, event: 'XXX Открытый Кубок России', city: 'Казань' },
+                { distance: '100m', date: '2024-11-22', result: 57.50, event: 'XXXI Открытый Кубок России', city: 'Казань' , videoUrl:'https://rutube.ru/video/3af95b142581617b7d3c1304f5fa8050/?r=wd'},
+                { distance: '100m', date: '2025-11-28', result: 56.76, event: 'XXXII Открытый Кубок России', city: 'Казань', videoUrl:'https://rutube.ru/video/de5a4ccbb36ead7c1b584f8b46b3ae5d/?r=wd' },
+                // 200 м на спине
+                { distance: '200m', date: '2024-11-21', result: 132.04, event: 'XXXI Открытый Кубок России', city: 'Казань', videoUrl:' https://rutube.ru/video/9850a8a8dadb607ac6fa548047a96730/?r=wd'}
+            ],
+            '50': [
+                // 50 м на спине
+                { distance: '50m', date: '2024-03-01', result: 27.44, event: 'ЧМ', city: 'Доха', videoUrl:'https://rutube.ru/video/35e9cba7981c96a694751a6ea1985d5e/?r=wd' },
+                { distance: '50m', date: '2024-03-01', result: 27.80, event: 'ЧМ', city: 'Доха', videoUrl:'https://rutube.ru/video/ebb8b5468501c44e871cd5606d1edfeb/?r=wd' },
+                { distance: '50m', date: '2024-03-02', result: 27.98, event: 'ЧМ', city: 'Доха' , videoUrl: 'https://rutube.ru/video/fa5d0ba77064626bbec4b14957c8c301/'},
+                { distance: '50m', date: '2024-04-06', result: 27.21, event: 'ЧР', city: 'Обнинск', videoUrl:'https://rutube.ru/video/0f0aeaef2103341dcc8d5e5362bd185a/'},
+                { distance: '50m', date: '2024-04-07', result: 27.41, event: 'ЧР', city: 'Обнинск', videoUrl:'https://rutube.ru/video/78a669802cdbcfb354102ae386470304/' },
+                { distance: '50m', date: '2024-04-07', result: 27.23, event: 'ЧР', city: 'Обнинск', videoUrl:'https://rutube.ru/video/a4fe528583f9813b1ca5fb70c7249b4c/' },
+                { distance: '50m', date: '2024-06-15', result: 27.55, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/f4a48551a60739782a7639304143378a/' },
+                { distance: '50m', date: '2024-06-16', result: 27.55, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/2397316d2e7c61e069de6121ea6d209a/' },
+                { distance: '50m', date: '2024-06-16', result: 27.33, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/d4922b1464f746ee7a5ce70b775f0bbc/' },
+                { distance: '50m', date: '2024-09-21', result: 27.35, event: 'СахМастерс', city: 'Южно-Сахалинск', videoUrl: 'https://rutube.ru/video/private/b721d0bdb9ec59df03f7221ab85ae4e2/?p=9k7gx-VNONRPV0ydZnSZaw' },
+                { distance: '50m', date: '2024-09-21', result: 27.54, event: 'СахМастерс', city: 'Южно-Сахалинск', videoUrl: '' },
+                { distance: '50m', date: '2025-03-28', result: 27.90, event: 'Чемпионат России', city: 'Казань', videoUrl: 'https://rutube.ru/video/2da837a5816cda8f01b43e5d2eec2f42/?r=wd'},
+                { distance: '50m', date: '2025-03-28', result: 27.79, event: 'Чемпионат России', city: 'Казань' , videoUrl: 'https://rutube.ru/video/2da837a5816cda8f01b43e5d2eec2f42/'},
+                { distance: '50m', date: '2025-03-29', result: 27.76, event: 'Чемпионат России', city: 'Казань', videoUrl: 'https://rutube.ru/video/2808098ad5c5decf32e2535f829d5256/' },
+                { distance: '50m', date: '2025-06-07', result: 27.94, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/5432af997d2c2817e871f7e28b7bd296/?r=wd' },
+                { distance: '50m', date: '2025-06-08', result: 27.97, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/28e78746f4acc8e9e8456169502f9823/?r=wd' },
+                { distance: '50m', date: '2025-06-08', result: 27.91, event: 'Открытый Петербург', city: 'Санкт-Петербург' , videoUrl: ''},
+                { distance: '50m', date: '2025-08-13', result: 27.25, event: 'ЧМ Мастерс', city: 'Сингапур' , videoUrl: 'https://rutube.ru/video/5cb78c058dca9a9687c29ea4999f407e/?r=wd'},
+                { distance: '50m', date: '2025-08-13', result: 27.31, event: 'ЧМ Мастерс', city: 'Сингапур' , videoUrl: ''},
+                { distance: '50m', date: '2025-08-13', result: 26.97, event: 'ЧМ Мастерс', city: 'Сингапур',  videoUrl: 'https://rutube.ru/video/34e8032f05d901fd4cbf9d8dee41355d/?r=wd' },
+                { distance: '50m', date: '2026-02-11', result: 27.27, event: 'Open masters games', city: 'Abu-Dhabi', videoUrl: 'https://rutube.ru/video/134c828cf0bfcb87700b08c4e93fac55/?r=wd' },
+                { distance: '50m', date: '2026-02-21', result: 27.28, event: 'Open masters games', city: 'Abu-Dhabi', videoUrl: 'https://rutube.ru/video/55f3584d9212db01bded96f5df496cb1/?r=wd' },
+                // 100 м на спине
+                { distance: '100m', date: '2024-02-28', result: 61.36, event: 'ЧМ', city: 'Доха', videoUrl: 'https://rutube.ru/video/cc311fd26cb2b313ea5cf79d7c2441e6/' },
+                { distance: '100m', date: '2024-04-03', result: 60.64, event: 'Кубок России', city: 'Обнинск', videoUrl: 'https://rutube.ru/video/16ee70f8843276727e6e92ba16fd5750/'},
+                { distance: '100m', date: '2024-09-20', result: 60.88, event: 'СахМастерс', city: 'Южно-Сахалинск', videoUrl: 'https://rutube.ru/video/private/7eba443e8b261056eca05049542b1b61/?p=HyJKuUnl5Kjz5dnoYNi2ng' },
+                { distance: '100m', date: '2025-03-28', result: 61.57, event: 'Чемпионат России', city: 'Казань', videoUrl: 'https://rutube.ru/video/1d75c1f2cf84207e64abc5688e8f848c/' },
+                { distance: '100m', date: '2025-06-07', result: 63.91, event: 'Открытый Петербург', city: 'Санкт-Петербург', videoUrl: 'https://rutube.ru/video/164909cceafa248e6f230de8a549e218/' },
+                { distance: '100m', date: '2025-08-12', result: 59.99, event: 'ЧМ Мастерс', city: 'Сингапур', videoUrl: 'https://rutube.ru/video/d44a7462ca0fffa9a0a8b55cb5e1731d/?r=wd' },
+                { distance: '100m', date: '2026-02-10', result: 60.78, event: 'Open masters games', city: 'Abu-Dhabi', videoUrl: 'https://rutube.ru/video/4fe141362c0534b844036c9b538079c5/?r=wd' }
+            ]
+        };
 
+        // Теперь основной код внутри самовызывающейся функции
+        (function() {
+            // Здесь все функции используют window.allResults
             // Форматирование даты
             function formatDate(dateStr) {
                 const d = new Date(dateStr);
@@ -689,7 +709,7 @@
 
             // Получение лучшего результата за год для дистанции
             function getBestByYear(poolType, distance) {
-                const results = allResults[poolType].filter(r => r.distance === distance);
+                const results = window.allResults[poolType].filter(r => r.distance === distance);
                 if (results.length === 0) return {};
                 
                 const byYear = {};
@@ -737,7 +757,7 @@
             // Отрисовка детального блока с результатами (с сохранением порядка)
             function renderDetailedResults(poolType, filterDiscipline = 'all') {
                 const container = document.getElementById('detailedResultsContainer');
-                const results = allResults[poolType];
+                const results = window.allResults[poolType];
                 
                 // Группируем по дисциплинам, СОХРАНЯЯ ИСХОДНЫЙ ПОРЯДОК
                 const grouped = {
@@ -783,12 +803,19 @@
                     // Проходим по результатам в том же порядке, как они объявлены в массиве
                     discResults.forEach(r => {
                         const isBest = (r.result === bestResults[disc.id]);
-							html += `<div class="results-grid-row ${isBest ? 'best-result' : ''}">`;
-							html += `<span><strong>${r.event}</strong>${r.videoUrl ? ' <a href="' + r.videoUrl + '" target="_blank" class="video-link">📹</a>' : ''}</span>`;
-							html += `<span>${new Date(r.date).getFullYear()}</span>`;
-							html += `<span>${r.city}</span>`;
-							html += `<span class="result-time">${formatTime(r.result)}</span>`;
-							html += `</div>`;
+                        html += `<div class="results-grid-row ${isBest ? 'best-result' : ''}">`;
+                        
+                        let links = '';
+if (r.videoUrl) {
+    links += `<a href="${r.videoUrl}" target="_blank" class="video-link">📹</a>`;
+}
+// Блок с protocolUrl удален
+
+html += `<span><strong>${r.event}</strong>${links}</span>`;
+                        html += `<span>${new Date(r.date).getFullYear()}</span>`;
+                        html += `<span>${r.city}</span>`;
+                        html += `<span class="result-time">${formatTime(r.result)}</span>`;
+                        html += `</div>`;
                     });
 
                     html += `</div></div>`;
@@ -915,7 +942,7 @@
                 return 'Недостаточно данных для анализа';
             }
 
-            // Показ подробной точечной диаграммы (С ПРАВИЛЬНЫМ ВРЕМЕННЫМ МАСШТАБОМ)
+            // Показ подробной точечной диаграммы
             let charts = {};
 
             function showDetailedChart(poolType, distance) {
@@ -923,8 +950,8 @@
                 const list = document.getElementById(`detailList${distance.replace('m', '')}`);
                 const canvasId = `detailChart${distance.replace('m', '')}`;
                 
-                const results = allResults[poolType]
-                    .filter(r => r.distance === distance); // БЕЗ СОРТИРОВКИ - сохраняем порядок из массива
+                const results = window.allResults[poolType]
+                    .filter(r => r.distance === distance);
                 
                 if (results.length === 0) {
                     list.innerHTML = '<div class="detail-item">Нет данных для отображения</div>';
@@ -950,7 +977,7 @@
                         datasets: [{
                             label: 'Результат (сек)',
                             data: results.map(r => ({ 
-                                x: new Date(r.date).getTime(), // Используем timestamp для правильного масштаба
+                                x: new Date(r.date).getTime(),
                                 y: r.result 
                             })),
                             backgroundColor: '#7c3aed',
@@ -1010,7 +1037,6 @@
                     }
                 });
                 
-                // Скрываем другие панели
                 ['50', '100', '200'].forEach(d => {
                     if (d !== distance.replace('m', '')) {
                         document.getElementById(`detailPanel${d}`).style.display = 'none';
@@ -1043,7 +1069,6 @@
                 
                 updateCharts(poolType);
                 
-                // Скрываем все детальные панели
                 ['50', '100', '200'].forEach(d => {
                     document.getElementById(`detailPanel${d}`).style.display = 'none';
                 });
@@ -1099,5 +1124,321 @@
             updateCharts('25');
         })();
     </script>
+	
+
+
+<style>
+/* Стили для блока протоколов */
+.protocols-footer {
+    margin-top: 48px;
+    padding: 32px;
+    background: #f8fafc;
+    border-radius: 24px;
+    border-top: 2px dashed #7c3aed;
+}
+
+.protocols-footer-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.year-section {
+    margin-bottom: 32px;
+}
+
+.year-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #7c3aed;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #7c3aed40;
+}
+
+.protocols-list {
+    list-style: none;
+    padding: 0;
+}
+
+.protocol-item {
+    margin-bottom: 12px;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.protocol-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 8px rgba(124, 58, 237, 0.1);
+}
+
+.protocol-date-badge {
+    background: #7c3aed;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    min-width: 80px;
+    text-align: center;
+}
+
+.protocol-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.protocol-event-name {
+    font-weight: 500;
+    color: #0f172a;
+    min-width: 200px;
+}
+
+.protocol-distance-badge {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 4px 10px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+}
+
+.protocol-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #7c3aed;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 30px;
+    background: #f1f0ff;
+    transition: all 0.2s;
+    margin-left: auto;
+}
+
+.protocol-link:hover {
+    background: #7c3aed;
+    color: white;
+}
+
+.protocol-link span {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 700px) {
+    .protocol-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .protocol-info {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .protocol-link {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+
+
+
+<script>
+(function() {
+    // Отдельный массив с протоколами
+    const protocolsData = [
+        {
+            event: 'XXXII Открытый Кубок России',
+            city: 'Казань',
+            startDate: '2025-11-27',
+            endDate: '2025-11-30',
+            poolType: '25',
+            url: 'https://disk.360.yandex.ru/i/fZDt8ygejAft6g'
+        },
+        {
+            event: 'XXXI Открытый Кубок России',
+            city: 'Казань',
+            startDate: '2024-11-21',
+            endDate: '2024-11-24',
+            poolType: '25',
+            url: 'https://disk.360.yandex.ru/i/hqyb5b3dj500Ww'
+        },
+		{
+            event: 'XXX Открытый Кубок России',
+            city: 'Казань',
+            startDate: '2023-11-9',
+            endDate: '2024-11-12',
+            poolType: '25',
+            url: 'https://disk.360.yandex.ru/i/ETFQpWSnUeS_MA'
+        },
+        {
+            event: 'XXXII Открытый чемпионат России',
+            city: 'Обнинск',
+            startDate: '2024-04-04',
+            endDate: '2024-04-07',
+            poolType: '50',
+            url: 'https://disk.360.yandex.ru/i/eZL66y_whzXWDA'
+        },
+		{
+            event: 'XXXII Открытый чемпионат России',
+            city: 'Казань',
+            startDate: '2025-03-27',
+            endDate: '2025-03-30',
+            poolType: '50',
+            url: 'https://disk.360.yandex.ru/i/f2Scw2opsc4M7w'
+        },
+		{
+            event: 'Открытый Петербург 24',
+            city: 'Санкт-Петербург',
+            startDate: '2024-06-15',
+            endDate: '2024-06-16',
+            poolType: '50',
+            url: 'https://disk.360.yandex.ru/i/ULlFBx1VAloG4A'
+        },
+		{
+            event: 'Открытый Петербург 25',
+            city: 'Санкт-Петербург',
+            startDate: '2025-06-07',
+            endDate: '2025-06-08',
+            poolType: '50',
+            url: 'https://disk.360.yandex.ru/i/Qne5I3Qm1g-UDA'
+        },
+		{
+            event: 'СахМастерс 24',
+            city: 'Южно-Сахалинск',
+            startDate: '2024-09-20',
+            endDate: '2024-09-22',
+            poolType: '50',
+            url: 'https://disk.360.yandex.ru/i/f-T80F91zxUfKQ'
+        },
+        {
+            event: 'ЧМ Мастерс',
+            city: 'Доха',
+            startDate: '2024-02-27',
+            endDate: '2024-03-3',
+            poolType: '50',
+            url: ''
+        },
+        {
+            event: 'ЧМ Мастерс',
+            city: 'Сингапур',
+            startDate: '2025-08-13',
+            endDate: '2025-08-13',
+            poolType: '50',
+            url: ''
+        },
+		{
+            event: 'Open Masters Games',
+            city: 'Абу-Даби',
+            startDate: '2026-02-09',
+            endDate: '2026-02-15',
+            poolType: '50',
+            url: ''
+        }
+    ];
+    
+    // Функция для форматирования диапазона дат
+    function formatDateRange(startDate, endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        
+        const startDay = start.getDate().toString().padStart(2, '0');
+        const endDay = end.getDate().toString().padStart(2, '0');
+        const month = (start.getMonth() + 1).toString().padStart(2, '0');
+        const year = start.getFullYear();
+        
+        if (startDate === endDate) {
+            return `${startDay}.${month}.${year}`;
+        } else {
+            return `${startDay}-${endDay}.${month}.${year}`;
+        }
+    }
+    
+    // Функция для отображения протоколов по годам
+    function renderProtocolsByYear() {
+        const container = document.getElementById('protocolsYears');
+        
+        if (!container) return;
+        
+        if (protocolsData.length === 0) {
+            container.innerHTML = '<div class="no-data-message">Нет доступных протоколов</div>';
+            return;
+        }
+        
+        // Группируем по годам
+        const byYear = {};
+        protocolsData.forEach(p => {
+            const year = new Date(p.startDate).getFullYear();
+            if (!byYear[year]) {
+                byYear[year] = [];
+            }
+            byYear[year].push(p);
+        });
+        
+        // Сортируем годы (от новых к старым)
+        const sortedYears = Object.keys(byYear).sort((a, b) => b - a);
+        
+        let html = '';
+        
+        sortedYears.forEach(year => {
+            // Сортируем протоколы внутри года по дате (от новых к старым)
+            const yearProtocols = byYear[year].sort((a, b) => 
+                new Date(b.startDate) - new Date(a.startDate)
+            );
+            
+            html += `
+                <div class="year-section">
+                    <h4 class="year-title">${year} год</h4>
+                    <ul class="protocols-list">
+            `;
+            
+            yearProtocols.forEach(p => {
+                const poolIcon = p.poolType === '25' ? '25м' : '50м';
+                const dateRange = formatDateRange(p.startDate, p.endDate);
+                
+                html += `
+                    <li class="protocol-item">
+                        <span class="protocol-date-badge">${dateRange}</span>
+                        <div class="protocol-info">
+                            <span class="protocol-event-name">${p.event}</span>
+                            <span class="protocol-distance-badge">${poolIcon}</span>
+                            <span class="protocol-distance-badge">${p.city}</span>
+                        </div>
+                        <a href="${p.url}" target="_blank" class="protocol-link">
+                            <span>📄</span> PDF
+                        </a>
+                    </li>
+                `;
+            });
+            
+            html += `
+                    </ul>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+    
+    // Рендерим протоколы
+    renderProtocolsByYear();
+})();
+</script>
 </body>
 </html>
